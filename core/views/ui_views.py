@@ -6,8 +6,28 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework.parsers import MultiPartParser
 
-from ..models import Enterprise, Product, Store, Sale, UserProfile
-from ..serializers import ProductSerializer, StoreSerializer, SaleSerializer
+from ..models import (
+    Enterprise,
+    Product,
+    Store,
+    Sale,
+    UserProfile,
+    Supplier,
+    Purchase,
+    Member,
+    Tag,
+    Employee,
+)
+from ..serializers import (
+    ProductSerializer,
+    StoreSerializer,
+    SaleSerializer,
+    SupplierSerializer,
+    PurchaseSerializer,
+    MemberSerializer,
+    TagSerializer,
+    EmployeeSerializer,
+)
 
 def get_user_enterprise(user):
     try:
@@ -131,3 +151,144 @@ class StoreKPIProgressView(APIView):
             })
 
         return Response({"success": True, "data": data})
+
+
+class SupplierListView(generics.ListAPIView):
+    serializer_class = SupplierSerializer
+    permission_classes = [IsAuthenticated]
+    filter_backends = [filters.SearchFilter]
+    search_fields = ['name', 'supplier_code', 'source_supplier_id']
+
+    def get_queryset(self):
+        enterprise = get_user_enterprise(self.request.user)
+        return Supplier.objects.filter(enterprise=enterprise) if enterprise else Supplier.objects.none()
+
+
+class SupplierCreateView(generics.CreateAPIView):
+    serializer_class = SupplierSerializer
+    permission_classes = [IsAuthenticated]
+
+    def perform_create(self, serializer):
+        enterprise = get_user_enterprise(self.request.user)
+        serializer.save(enterprise=enterprise)
+
+
+class SupplierDetailView(generics.RetrieveUpdateDestroyAPIView):
+    serializer_class = SupplierSerializer
+    permission_classes = [IsAuthenticated]
+
+    def get_queryset(self):
+        enterprise = get_user_enterprise(self.request.user)
+        return Supplier.objects.filter(enterprise=enterprise) if enterprise else Supplier.objects.none()
+
+
+class PurchaseListView(generics.ListAPIView):
+    serializer_class = PurchaseSerializer
+    permission_classes = [IsAuthenticated]
+
+    def get_queryset(self):
+        enterprise = get_user_enterprise(self.request.user)
+        return Purchase.objects.filter(enterprise=enterprise) if enterprise else Purchase.objects.none()
+
+
+class PurchaseCreateView(generics.CreateAPIView):
+    serializer_class = PurchaseSerializer
+    permission_classes = [IsAuthenticated]
+
+    def perform_create(self, serializer):
+        enterprise = get_user_enterprise(self.request.user)
+        serializer.save(enterprise=enterprise)
+
+
+class PurchaseDetailView(generics.RetrieveUpdateDestroyAPIView):
+    serializer_class = PurchaseSerializer
+    permission_classes = [IsAuthenticated]
+
+    def get_queryset(self):
+        enterprise = get_user_enterprise(self.request.user)
+        return Purchase.objects.filter(enterprise=enterprise) if enterprise else Purchase.objects.none()
+
+
+class MemberListView(generics.ListAPIView):
+    serializer_class = MemberSerializer
+    permission_classes = [IsAuthenticated]
+    filter_backends = [filters.SearchFilter]
+    search_fields = ['name', 'card_number', 'phone']
+
+    def get_queryset(self):
+        enterprise = get_user_enterprise(self.request.user)
+        return Member.objects.filter(enterprise=enterprise) if enterprise else Member.objects.none()
+
+
+class MemberCreateView(generics.CreateAPIView):
+    serializer_class = MemberSerializer
+    permission_classes = [IsAuthenticated]
+
+    def perform_create(self, serializer):
+        enterprise = get_user_enterprise(self.request.user)
+        serializer.save(enterprise=enterprise)
+
+
+class MemberDetailView(generics.RetrieveUpdateDestroyAPIView):
+    serializer_class = MemberSerializer
+    permission_classes = [IsAuthenticated]
+
+    def get_queryset(self):
+        enterprise = get_user_enterprise(self.request.user)
+        return Member.objects.filter(enterprise=enterprise) if enterprise else Member.objects.none()
+
+
+class EmployeeListView(generics.ListAPIView):
+    serializer_class = EmployeeSerializer
+    permission_classes = [IsAuthenticated]
+    filter_backends = [filters.SearchFilter]
+    search_fields = ['name', 'employee_number', 'phone']
+
+    def get_queryset(self):
+        enterprise = get_user_enterprise(self.request.user)
+        return Employee.objects.filter(enterprise=enterprise) if enterprise else Employee.objects.none()
+
+
+class EmployeeCreateView(generics.CreateAPIView):
+    serializer_class = EmployeeSerializer
+    permission_classes = [IsAuthenticated]
+
+    def perform_create(self, serializer):
+        enterprise = get_user_enterprise(self.request.user)
+        serializer.save(enterprise=enterprise)
+
+
+class EmployeeDetailView(generics.RetrieveUpdateDestroyAPIView):
+    serializer_class = EmployeeSerializer
+    permission_classes = [IsAuthenticated]
+
+    def get_queryset(self):
+        enterprise = get_user_enterprise(self.request.user)
+        return Employee.objects.filter(enterprise=enterprise) if enterprise else Employee.objects.none()
+
+
+class TagListView(generics.ListAPIView):
+    serializer_class = TagSerializer
+    permission_classes = [IsAuthenticated]
+
+    def get_queryset(self):
+        enterprise = get_user_enterprise(self.request.user)
+        return Tag.objects.filter(enterprise=enterprise) if enterprise else Tag.objects.none()
+
+
+class TagCreateView(generics.CreateAPIView):
+    serializer_class = TagSerializer
+    permission_classes = [IsAuthenticated]
+
+    def perform_create(self, serializer):
+        enterprise = get_user_enterprise(self.request.user)
+        serializer.save(enterprise=enterprise)
+
+
+class TagDetailView(generics.RetrieveUpdateDestroyAPIView):
+    serializer_class = TagSerializer
+    permission_classes = [IsAuthenticated]
+
+    def get_queryset(self):
+        enterprise = get_user_enterprise(self.request.user)
+        return Tag.objects.filter(enterprise=enterprise) if enterprise else Tag.objects.none()

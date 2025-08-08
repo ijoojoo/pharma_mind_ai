@@ -1,10 +1,30 @@
 from django.urls import path
 from .views import (
     # UI Views
-    StoreListView, StoreDetailView,
-    ProductListView, ProductCreateView, ProductDetailView, ProductUploadView,
+    StoreListView,
+    StoreDetailView,
+    ProductListView,
+    ProductCreateView,
+    ProductDetailView,
+    ProductUploadView,
     SaleCreateView,
-    UserInfoView, StoreKPIProgressView,
+    UserInfoView,
+    StoreKPIProgressView,
+    SupplierListView,
+    SupplierCreateView,
+    SupplierDetailView,
+    PurchaseListView,
+    PurchaseCreateView,
+    PurchaseDetailView,
+    MemberListView,
+    MemberCreateView,
+    MemberDetailView,
+    EmployeeListView,
+    EmployeeCreateView,
+    EmployeeDetailView,
+    TagListView,
+    TagCreateView,
+    TagDetailView,
     # Sync Views
     ProductBatchSyncView,
     StoreBatchSyncView,
@@ -15,7 +35,7 @@ from .views import (
     MemberBatchSyncView,
     EmployeeBatchSyncView,
     # AI Views
-    AIAutoCategorizeView
+    AIAutoCategorizeView,
 )
 
 urlpatterns = [
@@ -29,6 +49,21 @@ urlpatterns = [
     path('products/upload/', ProductUploadView.as_view(), name='product-upload'),
     path('products/<int:pk>/', ProductDetailView.as_view(), name='product-detail'),
     path('sales/create/', SaleCreateView.as_view(), name='sale-create'),
+    path('suppliers/', SupplierListView.as_view(), name='supplier-list'),
+    path('suppliers/create/', SupplierCreateView.as_view(), name='supplier-create'),
+    path('suppliers/<int:pk>/', SupplierDetailView.as_view(), name='supplier-detail'),
+    path('purchases/', PurchaseListView.as_view(), name='purchase-list'),
+    path('purchases/create/', PurchaseCreateView.as_view(), name='purchase-create'),
+    path('purchases/<int:pk>/', PurchaseDetailView.as_view(), name='purchase-detail'),
+    path('members/', MemberListView.as_view(), name='member-list'),
+    path('members/create/', MemberCreateView.as_view(), name='member-create'),
+    path('members/<int:pk>/', MemberDetailView.as_view(), name='member-detail'),
+    path('employees/', EmployeeListView.as_view(), name='employee-list'),
+    path('employees/create/', EmployeeCreateView.as_view(), name='employee-create'),
+    path('employees/<int:pk>/', EmployeeDetailView.as_view(), name='employee-detail'),
+    path('tags/', TagListView.as_view(), name='tag-list'),
+    path('tags/create/', TagCreateView.as_view(), name='tag-create'),
+    path('tags/<int:pk>/', TagDetailView.as_view(), name='tag-detail'),
 
     # --- 数据连接器专用API端点 ---
     path('data/products/sync/', ProductBatchSyncView.as_view(), name='data-product-sync'),

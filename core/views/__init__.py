@@ -2,8 +2,30 @@
 # 它也作为一个中心点来导入所有的视图，以便 Django 能够找到它们。
 
 from .ui_views import (
-    StoreListView, StoreDetailView, ProductListView, ProductCreateView, 
-    ProductDetailView, ProductUploadView, SaleCreateView, UserInfoView
+    StoreListView,
+    StoreDetailView,
+    ProductListView,
+    ProductCreateView,
+    ProductDetailView,
+    ProductUploadView,
+    SaleCreateView,
+    UserInfoView,
+    StoreKPIProgressView,
+    SupplierListView,
+    SupplierCreateView,
+    SupplierDetailView,
+    PurchaseListView,
+    PurchaseCreateView,
+    PurchaseDetailView,
+    MemberListView,
+    MemberCreateView,
+    MemberDetailView,
+    EmployeeListView,
+    EmployeeCreateView,
+    EmployeeDetailView,
+    TagListView,
+    TagCreateView,
+    TagDetailView,
 )
 from .sync_views import (
     ProductBatchSyncView, StoreBatchSyncView, SupplierBatchSyncView,
@@ -16,6 +38,12 @@ from .ai_views import AIAutoCategorizeView
 __all__ = [
     'StoreListView', 'StoreDetailView', 'ProductListView', 'ProductCreateView',
     'ProductDetailView', 'ProductUploadView', 'SaleCreateView', 'UserInfoView',
+    'StoreKPIProgressView',
+    'SupplierListView', 'SupplierCreateView', 'SupplierDetailView',
+    'PurchaseListView', 'PurchaseCreateView', 'PurchaseDetailView',
+    'MemberListView', 'MemberCreateView', 'MemberDetailView',
+    'EmployeeListView', 'EmployeeCreateView', 'EmployeeDetailView',
+    'TagListView', 'TagCreateView', 'TagDetailView',
     'ProductBatchSyncView', 'StoreBatchSyncView', 'SupplierBatchSyncView',
     'PurchaseBatchSyncView', 'SaleBatchSyncView', 'InventorySnapshotBatchSyncView',
     'MemberBatchSyncView', 'EmployeeBatchSyncView',
