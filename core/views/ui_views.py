@@ -1,4 +1,5 @@
 import pandas as pd
+from django.utils import timezone
 from rest_framework import generics, filters, status
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.views import APIView
@@ -98,4 +99,35 @@ class UserInfoView(APIView):
             "permissions": ["*:*:*"],
             "avatar": "https://avatars.githubusercontent.com/u/44761321?v=4"
         }
+        return Response({"success": True, "data": data})
+
+
+class StoreKPIProgressView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request, *args, **kwargs):
+        enterprise = get_user_enterprise(request.user)
+        stores = Store.objects.filter(enterprise=enterprise) if enterprise else []
+
+        now = timezone.localtime()
+        start = now.replace(hour=8, minute=0, second=0, microsecond=0)
+        end = now.replace(hour=22, minute=0, second=0, microsecond=0)
+        total_seconds = (end - start).total_seconds() or 1
+        elapsed_seconds = (now - start).total_seconds()
+        time_progress = max(0, min(elapsed_seconds / total_seconds, 1))
+
+        data = []
+        for idx, store in enumerate(stores, start=1):
+            target = 1000
+            completed = min(idx * 100, target)
+            progress = completed / target
+            data.append({
+                "store_id": store.id,
+                "store_name": store.name,
+                "kpi_target": target,
+                "kpi_completed": completed,
+                "kpi_progress": round(progress, 2),
+                "time_progress": round(time_progress, 2),
+            })
+
         return Response({"success": True, "data": data})
