@@ -4,7 +4,7 @@ from .views import (
     StoreListView, StoreDetailView,
     ProductListView, ProductCreateView, ProductDetailView, ProductUploadView,
     SaleCreateView,
-    UserInfoView,
+    UserInfoView, StoreKPIProgressView,
     # Sync Views
     ProductBatchSyncView,
     StoreBatchSyncView,
@@ -21,6 +21,7 @@ from .views import (
 urlpatterns = [
     # --- 面向前端UI的API ---
     path('user/info/', UserInfoView.as_view(), name='user-info'),
+    path('home/kpi-progress/', StoreKPIProgressView.as_view(), name='home-kpi-progress'),
     path('stores/', StoreListView.as_view(), name='store-list'),
     path('stores/<int:pk>/', StoreDetailView.as_view(), name='store-detail'),
     path('products/', ProductListView.as_view(), name='product-list'),
