@@ -1,0 +1,14 @@
+# file: examples/ai/strategy_replenishment.http
+# purpose: 示例：Strategy 补货
+POST http://127.0.0.1:8000/api/ai/strategy/replenishment/
+Content-Type: application/json
+X-Tenant-Id: t_demo
+
+{
+  "store_id": "S1",
+  "items": [
+    {"sku": "SKU1", "daily_demand_mean": 5, "daily_demand_sigma": 2, "leadtime_days": 3, "on_hand": 3, "on_order": 0, "service_level": 0.95, "pack_size": 6}
+  ],
+  "policy": {"review_days": 7},
+  "with_commentary": false
+}

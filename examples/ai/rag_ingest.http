@@ -1,0 +1,10 @@
+# file: examples/ai/rag_ingest.http
+# purpose: 示例：RAG 文本直传
+POST http://127.0.0.1:8000/api/ai/rag/ingest/
+Content-Type: application/json
+X-Tenant-Id: t_demo
+
+{
+  "filename": "readme.txt",
+  "content": "这是一段用于测试的文本。\n\n分两段。"
+}

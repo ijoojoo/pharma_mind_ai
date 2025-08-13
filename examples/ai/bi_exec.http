@@ -1,0 +1,11 @@
+# file: examples/ai/bi_exec.http
+# purpose: 示例：BI 只读 SQL 执行
+POST http://127.0.0.1:8000/api/ai/bi/exec/
+Content-Type: application/json
+X-Tenant-Id: t_demo
+
+{
+  "sql": "SELECT app, name FROM django_migrations",
+  "limit": 5,
+  "with_commentary": false
+}

@@ -54,7 +54,7 @@
 
 1.  **克隆项目**:
     ```bash
-    git clone [https://github.com/your-repo/pharma_mind_ai.git](https://github.com/your-repo/pharma_mind_ai.git)
+    git clone [https://github.com/ijoojoo/pharma_mind_ai.git](https://github.com/ijoojoo/pharma_mind_ai.git)
     cd pharma_mind_ai
     ```
 

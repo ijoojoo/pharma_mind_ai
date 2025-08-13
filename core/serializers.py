@@ -1,12 +1,26 @@
 from rest_framework import serializers
-from .models import (
-    Enterprise, Product, Store, Supplier, Purchase, 
-    Member, Tag, Employee, Sale, InventorySnapshot, UserProfile
-)
+#导入模型 ---
+from .models.employee import Employee
+from .models.enterprise_api_key import EnterpriseAPIKey
+from .models.enterprise import Enterprise
+from .models.inventory_snapshot import InventorySnapshot
+from .models.member_tag import MemberTag
+from .models.member import Member
+from .models.product import Product
+from .models.purchase import Purchase
+from .models.sale import Sale
+from .models.store import Store
+from .models.supplier import Supplier
+from .models.user_profile import UserProfile
 
 class EnterpriseSerializer(serializers.ModelSerializer):
     class Meta:
         model = Enterprise
+        fields = '__all__'
+
+class EnterpriseAPIKeySerializer(serializers.ModelSerializer):
+    class Meta:
+        model = EnterpriseAPIKey
         fields = '__all__'
 
 class ProductSerializer(serializers.ModelSerializer):
@@ -34,9 +48,9 @@ class MemberSerializer(serializers.ModelSerializer):
         model = Member
         fields = '__all__'
 
-class TagSerializer(serializers.ModelSerializer):
+class MemberTagSerializer(serializers.ModelSerializer):
     class Meta:
-        model = Tag
+        model = MemberTag
         fields = '__all__'
 
 class EmployeeSerializer(serializers.ModelSerializer):

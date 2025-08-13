@@ -1,7 +1,7 @@
 from django.utils import timezone
 from rest_framework.authentication import BaseAuthentication
 from rest_framework.exceptions import AuthenticationFailed
-from .models import EnterpriseAPIKey
+from .models.enterprise_api_key import EnterpriseAPIKey
 
 class EnterpriseAPIKeyAuthentication(BaseAuthentication):
     """

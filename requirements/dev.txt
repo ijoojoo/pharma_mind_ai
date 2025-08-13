@@ -1,0 +1,6 @@
+# file: requirements/dev.txt
+# purpose: 本地开发/测试依赖（与生产隔离）
+-r base.txt
+pytest>=8.2.0
+pytest-django>=4.8.0
+freezegun>=1.5.1

@@ -1,0 +1,10 @@
+# file: examples/ai/billing_topup.http
+# purpose: 示例：充值接口
+POST http://127.0.0.1:8000/api/ai/system/billing/topup/
+Content-Type: application/json
+X-Tenant-Id: t_demo
+
+{
+  "tokens": 2000,
+  "reason": "demo"
+}

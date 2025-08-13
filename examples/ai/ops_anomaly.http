@@ -1,0 +1,14 @@
+# file: examples/ai/ops_anomaly.http
+# purpose: 示例：OPS 异常检测
+POST http://127.0.0.1:8000/api/ai/ops/anomaly/
+Content-Type: application/json
+X-Tenant-Id: t_demo
+
+{
+  "window": {"start": "2025-08-01", "end": "2025-08-12"},
+  "rules": [
+    {"id": "drop", "type": "sales_drop", "threshold_pct": 30, "lookback": 7},
+    {"id": "so", "type": "stockout", "min_qty": 0}
+  ],
+  "with_commentary": false
+}

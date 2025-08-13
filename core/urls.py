@@ -1,44 +1,26 @@
-from django.urls import path
-from .views import (
-    # UI Views
-    StoreListView, StoreDetailView,
-    ProductListView, ProductCreateView, ProductDetailView, ProductUploadView,
-    SaleCreateView,
-    UserInfoView,
-    # Sync Views
-    ProductBatchSyncView,
-    StoreBatchSyncView,
-    SupplierBatchSyncView,
-    PurchaseBatchSyncView,
-    SaleBatchSyncView,
-    InventorySnapshotBatchSyncView,
-    MemberBatchSyncView,
-    EmployeeBatchSyncView,
-    # AI Views
-    AIAutoCategorizeView
-)
+# core/urls.py
+from django.urls import path, include
 
 urlpatterns = [
-    # --- 面向前端UI的API ---
-    path('user/info/', UserInfoView.as_view(), name='user-info'),
-    path('stores/', StoreListView.as_view(), name='store-list'),
-    path('stores/<int:pk>/', StoreDetailView.as_view(), name='store-detail'),
-    path('products/', ProductListView.as_view(), name='product-list'),
-    path('products/create/', ProductCreateView.as_view(), name='product-create'),
-    path('products/upload/', ProductUploadView.as_view(), name='product-upload'),
-    path('products/<int:pk>/', ProductDetailView.as_view(), name='product-detail'),
-    path('sales/create/', SaleCreateView.as_view(), name='sale-create'),
+    # 前端 UI 接口
+    #首页
+    path("welcome/", include("core.views.ui.welcome.urls")),
+    #用户
+    path("user/", include("core.views.ui.user.urls")),
+    #门店中心
+    path("store/", include("core.views.ui.store.urls")),
+    #商品中心
+    path("product/", include("core.views.ui.product.urls")),
+    #销售记录
+    path("sale/", include("core.views.ui.sale.urls")),
+    #库存中心
+    # path("inventory/", include("core.views.ui.inventory.urls")),
+    #系统设置
+    # path("system/", include("core.views.ui.system.urls")),
 
-    # --- 数据连接器专用API端点 ---
-    path('data/products/sync/', ProductBatchSyncView.as_view(), name='data-product-sync'),
-    path('data/stores/sync/', StoreBatchSyncView.as_view(), name='data-store-sync'),
-    path('data/suppliers/sync/', SupplierBatchSyncView.as_view(), name='data-supplier-sync'),
-    path('data/purchases/sync/', PurchaseBatchSyncView.as_view(), name='data-purchase-sync'),
-    path('data/sales/sync/', SaleBatchSyncView.as_view(), name='data-sale-sync'),
-    path('data/inventory/sync/', InventorySnapshotBatchSyncView.as_view(), name='data-inventory-sync'),
-    path('data/members/sync/', MemberBatchSyncView.as_view(), name='data-member-sync'),
-    path('data/employees/sync/', EmployeeBatchSyncView.as_view(), name='data-employee-sync'),
+    # 数据同步（数据连接器）
+    path("sync/", include("core.views.sync.urls")),
 
-    # --- AI功能API端点 ---
-    path('ai/products/auto-categorize/', AIAutoCategorizeView.as_view(), name='ai-product-auto-categorize'),
+    # AI
+    path("ai/", include("core.views.ai.urls")),
 ]

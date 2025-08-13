@@ -1,0 +1,12 @@
+# file: examples/ai/kpi_target_plan.http
+# purpose: 示例：KPI 目标拟定
+POST http://127.0.0.1:8000/api/ai/kpi/target_plan/
+Content-Type: application/json
+X-Tenant-Id: t_demo
+
+{
+  "period": {"start": "2025-08-01", "end": "2025-08-07"},
+  "lift_pct": 12,
+  "baseline_mode": "last_period",
+  "with_commentary": false
+}

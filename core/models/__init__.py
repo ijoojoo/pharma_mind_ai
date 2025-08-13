@@ -1,19 +1,32 @@
-# This file makes Python treat the 'models' directory as a package.
-# It also serves as a central point to import all models, so Django can find them.
+# core/models/__init__.py
+from .base import AuditableModel
+from .employee import Employee
+from .enterprise_api_key import EnterpriseAPIKey
+from .enterprise import Enterprise
+from .inventory_snapshot import InventorySnapshot
+from .member_tag import MemberTag
+from .member import Member
+from .product import Product
+from .purchase import Purchase
+from .sale import Sale
+from .store import Store
+from .supplier import Supplier
+from .user_profile import UserProfile
 
-from .base import Enterprise, AuditableModel
-from .products import Product, Supplier
-from .transactions import Store, Purchase, Sale
-from .inventory import InventorySnapshot
-from .profiles import Member, Tag, Employee, UserProfile
-from .security import EnterpriseAPIKey
+from .ai_settings import AiTenantDefaultModel, AiModelPreference
 
-# You can optionally define __all__ to control what `from .models import *` imports
+
+
 __all__ = [
-    'Enterprise', 'AuditableModel',
-    'Product', 'Supplier',
-    'Store', 'Purchase', 'Sale',
-    'InventorySnapshot',
-    'Member', 'Tag', 'Employee', 'UserProfile',
-    'EnterpriseAPIKey',
+    "AuditableModel",
+    "Enterprise",
+    "Product", "Store", "Supplier",
+    "Member", "MemberTag",
+    "Employee",
+    "Purchase", 
+    "Sale",
+    "InventorySnapshot",
+    "EnterpriseAPIKey",
+    "UserProfile",
+    "AiTenantDefaultModel", "AiModelPreference",
 ]

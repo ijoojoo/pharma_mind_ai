@@ -1,0 +1,8 @@
+# file: requirements/base.txt
+# purpose: 项目基础依赖（与数据库/部署无关）
+Django>=4.2,<5.0
+requests>=2.32.3
+# LLM Token 估算（可选，未安装会自动回退）
+tiktoken>=0.7.0
+# 跨域（如前端直连 API 可启用）
+django-cors-headers>=4.4.0

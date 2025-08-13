@@ -1,0 +1,11 @@
+# file: examples/ai/strategy_pricing.http
+# purpose: 示例：Strategy 定价
+POST http://127.0.0.1:8000/api/ai/strategy/pricing/
+Content-Type: application/json
+X-Tenant-Id: t_demo
+
+{
+  "product": {"cost": 12.5, "current_price": 19.9, "competitor_price": 21.0},
+  "constraints": {"target_margin": 0.25, "comp_weight": 0.4, "round_to": 0.1, "price_endings": [0.89, 0.99]},
+  "with_commentary": false
+}

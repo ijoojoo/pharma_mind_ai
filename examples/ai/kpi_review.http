@@ -1,0 +1,28 @@
+# file: examples/ai/kpi_review.http
+# purpose: 示例：KPI 复盘
+POST http://127.0.0.1:8000/api/ai/kpi/review/
+Content-Type: application/json
+X-Tenant-Id: t_demo
+
+{
+  "period": {"start": "2025-08-01", "end": "2025-08-07"},
+  "targets_daily": [
+    {"date": "2025-08-01", "target": 100},
+    {"date": "2025-08-02", "target": 100},
+    {"date": "2025-08-03", "target": 100},
+    {"date": "2025-08-04", "target": 100},
+    {"date": "2025-08-05", "target": 100},
+    {"date": "2025-08-06", "target": 100},
+    {"date": "2025-08-07", "target": 100}
+  ],
+  "actuals": [
+    {"date": "2025-08-01", "sales": 110},
+    {"date": "2025-08-02", "sales": 98},
+    {"date": "2025-08-03", "sales": 95},
+    {"date": "2025-08-04", "sales": 105},
+    {"date": "2025-08-05", "sales": 100},
+    {"date": "2025-08-06", "sales": 103},
+    {"date": "2025-08-07", "sales": 100}
+  ],
+  "with_commentary": false
+}

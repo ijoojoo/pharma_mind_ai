@@ -1,0 +1,6 @@
+# file: requirements.txt
+# purpose: 根依赖入口，默认用于开发环境安装；如使用 Poetry/PDM 可忽略本文件
+-r requirements/base.txt
+-r requirements/ai.txt
+# 如需一并安装开发依赖，可改为：
+# -r requirements/dev.txt

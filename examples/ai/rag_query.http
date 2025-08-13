@@ -1,0 +1,10 @@
+# file: examples/ai/rag_query.http
+# purpose: 示例：RAG 检索+生成
+POST http://127.0.0.1:8000/api/ai/rag/query/
+Content-Type: application/json
+X-Tenant-Id: t_demo
+
+{
+  "query": "测试文本里说了什么？",
+  "top_k": 3
+}

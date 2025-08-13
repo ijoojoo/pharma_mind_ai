@@ -2,13 +2,19 @@ from django.contrib import admin, messages
 from django.contrib.auth.admin import UserAdmin as BaseUserAdmin
 from django.contrib.auth.models import User
 
-# --- 核心修改：从新的模型文件中分别导入模型 ---
-from .models.base import Enterprise
-from .models.products import Product, Supplier
-from .models.transactions import Store, Purchase, Sale
-from .models.inventory import InventorySnapshot
-from .models.profiles import Member, Tag, Employee, UserProfile
-from .models.security import EnterpriseAPIKey
+#导入模型 ---
+from .models.employee import Employee
+from .models.enterprise_api_key import EnterpriseAPIKey
+from .models.enterprise import Enterprise
+from .models.inventory_snapshot import InventorySnapshot
+from .models.member_tag import MemberTag
+from .models.member import Member
+from .models.product import Product
+from .models.purchase import Purchase
+from .models.sale import Sale
+from .models.store import Store
+from .models.supplier import Supplier
+from .models.user_profile import UserProfile
 
 # --- 用户角色与企业管理 ---
 class UserProfileInline(admin.StackedInline):
@@ -96,7 +102,7 @@ class MemberAdmin(admin.ModelAdmin):
     list_filter = ('enterprise',)
     filter_horizontal = ('tags',)
 
-@admin.register(Tag)
+@admin.register(MemberTag)
 class TagAdmin(admin.ModelAdmin):
     list_display = ('name', 'enterprise')
     list_filter = ('enterprise',)
