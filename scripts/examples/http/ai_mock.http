@@ -1,0 +1,37 @@
+# file: scripts/examples/http/ai_mock.http
+# purpose: Mock 端点联调示例：不调用真实 LLM/数据库
+### Chat Mock
+POST http://127.0.0.1:8000/api/ai/mock/chat/
+Content-Type: application/json
+
+{"messages": [{"role":"user","content":"你好，给我演示下"}]}
+
+### BI Mock
+POST http://127.0.0.1:8000/api/ai/mock/bi/
+Content-Type: application/json
+
+{}
+
+### OPS Mock
+POST http://127.0.0.1:8000/api/ai/mock/ops/
+Content-Type: application/json
+
+{}
+
+### Strategy Mock - Price
+POST http://127.0.0.1:8000/api/ai/mock/strategy/price/
+Content-Type: application/json
+
+{}
+
+### Strategy Mock - Promo
+POST http://127.0.0.1:8000/api/ai/mock/strategy/promo/
+Content-Type: application/json
+
+{}
+
+### Strategy Mock - Replenish
+POST http://127.0.0.1:8000/api/ai/mock/strategy/replenish/
+Content-Type: application/json
+
+{}

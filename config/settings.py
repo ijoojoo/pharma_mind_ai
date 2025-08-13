@@ -16,6 +16,7 @@ from datetime import timedelta # 1. 确保导入了 timedelta
 #引入AI相关设置
 from .setting_env import *
 from .settings_patch_ai import *
+from .settings_ai import *
 
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -56,7 +57,17 @@ INSTALLED_APPS = [
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
+
     'corsheaders.middleware.CorsMiddleware',
+    
+    'core.middleware.tenant.TenantMiddleware',
+    'core.middleware.request_id.RequestIdMiddleware',
+    'core.middleware.maxbody.MaxBodyMiddleware',
+    'core.middleware.signature.SignatureAuthMiddleware',
+    'core.middleware.cors.CorsMiddleware',
+    'core.middleware.ratelimit.RateLimitMiddleware',
+    'core.middleware.metrics.RequestMetricsMiddleware',
+
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
@@ -197,3 +208,8 @@ CORS_ALLOW_ALL_ORIGINS = True
 #     "http://127.0.0.1:8848",
 #     "http://192.168.32.8:8848",
 # ]
+
+
+#日志测试
+from core.logging.json import setup_json_logging
+setup_json_logging()

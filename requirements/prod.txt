@@ -1,7 +1,11 @@
 # file: requirements/prod.txt
 # purpose: 生产镜像/服务器安装清单（继承 base + 典型部署包）
--r base.txt
-# 选择你的 WSGI 服务：gunicorn 或 uwsgi（两者择一即可）
-gunicorn>=22.0.0
-# 如果用 PostgreSQL，请启用下行；若使用 MySQL/MSSQL，请换成对应驱动
-# psycopg2-binary>=2.9.9
+# purpose: 部署所需最小依赖（请根据你的项目补充/锁定版本）
+Django>=4.2,<5.0
+psycopg2-binary>=2.9
+gunicorn>=21.2
+uvicorn>=0.23
+requests>=2.32
+python-dotenv>=1.0
+# 若使用 MSSQL / MySQL，请按需增加：
+#pymssql or mssql-django / mysqlclient

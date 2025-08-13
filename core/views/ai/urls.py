@@ -11,4 +11,5 @@ urlpatterns = [
     path("ops/", include("core.views.ai.ops.urls")),
     path("strategy/", include("core.views.ai.strategy.urls")),
     path("kpi/", include("core.views.ai.kpi.urls")),
+    path("mock/", include("core.views.ai.mock.urls")),
 ]

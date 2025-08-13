@@ -1,0 +1,15 @@
+# file: docker/.dockerignore
+# purpose: 减少构建上下文
+__pycache__
+*.pyc
+*.pyo
+*.pyd
+*.pytest_cache
+*.sqlite3
+.env
+.git
+.gitignore
+node_modules
+media
+static
+.tmp

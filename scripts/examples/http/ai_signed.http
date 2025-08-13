@@ -1,0 +1,10 @@
+# file: scripts/examples/http/ai_signed.http
+# purpose: VSCode REST Client 示例（签名调用）。注意：X-Signature 需要客户端脚本计算，这里仅示意头部结构。
+### 健康（示意）
+GET http://127.0.0.1:8000/api/ai/system/health/
+X-Api-Key: demo-key
+X-Timestamp: 1723584000
+X-Nonce: 0123456789abcdef
+X-Signature: <use sign_request.py to compute>
+X-Tenant-Id: demo-tenant
+Accept: application/json

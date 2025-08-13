@@ -1,0 +1,12 @@
+# file: scripts/examples/http/ai_cors.http
+# purpose: CORS 联调示例：预检 + 实际请求（将 Origin 改成你的前端地址）
+### 预检（OPTIONS）
+OPTIONS http://127.0.0.1:8000/api/ai/system/health/
+Origin: http://localhost:3000
+Access-Control-Request-Method: GET
+Access-Control-Request-Headers: X-Tenant-Id
+
+### 实际请求（GET）
+GET http://127.0.0.1:8000/api/ai/system/health/
+Origin: http://localhost:3000
+Accept: application/json
