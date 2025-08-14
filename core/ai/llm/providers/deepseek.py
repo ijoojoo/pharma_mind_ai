@@ -1,33 +1,42 @@
 # file: core/ai/llm/providers/deepseek.py
-# purpose: DeepSeek 适配；读取 DEEPSEEK_API_KEY；OpenAI 风格
+# purpose: DeepSeek 适配器：使用 OpenAI 兼容的 `/chat/completions` 接口，标准化输出。
+
 from __future__ import annotations
-from typing import Any, Dict, List, Optional
+import os
 import requests
-from ..base import LlmProvider, ProviderMeta, ProviderError
+from typing import Any, Dict
+from .base import BaseAdapter
 
 
-class DeepseekProvider(LlmProvider):
-    meta = ProviderMeta(
-        key="deepseek",
-        name="DeepSeek",
-        default_model="deepseek-chat",
-        env_keys={"api_key": "DEEPSEEK_API_KEY", "base_url": "DEEPSEEK_API_BASE"},
-    )
+class DeepSeekAdapter(BaseAdapter):
+    """DeepSeek 适配器：兼容 OpenAI Chat Completions 的调用与 usage 字段。"""
 
-    def chat(self, *, messages: List[Dict[str, str]], model: Optional[str] = None, stream: bool = False, **kwargs) -> Dict[str, Any]:
-        base = (self.base_url or "https://api.deepseek.com").rstrip("/")
-        url = f"{base}/chat/completions"
+    provider = "deepseek"
+    default_model = os.getenv("DEEPSEEK_MODEL", "deepseek-chat")
+
+    def __init__(self, **kw):
+        """从环境或传参读取 base_url/api_key/model。"""
+        super().__init__(api_key=kw.get("api_key") or os.getenv("DEEPSEEK_API_KEY"), model=kw.get("model"))
+        self.base = os.getenv("DEEPSEEK_BASE_URL", "https://api.deepseek.com")
+
+    def _chat_impl(self, prompt: str) -> Dict[str, Any]:
+        """调用 DeepSeek API 并返回标准化结构。"""
+        if not self.api_key:
+            raise ValueError("DEEPSEEK_API_KEY is required")
+        url = f"{self.base}/chat/completions"
         headers = {"Authorization": f"Bearer {self.api_key}", "Content-Type": "application/json"}
-        payload = {"model": model or self.meta.default_model, "messages": messages, "stream": False}
-        try:
-            r = requests.post(url, headers=headers, json=payload, timeout=self.timeout)
-            if r.status_code >= 400:
-                raise ProviderError(f"deepseek http {r.status_code}: {r.text[:200]}")
-            data = r.json()
-            content = data.get("choices", [{}])[0].get("message", {}).get("content", "")
-            usage = data.get("usage", {})
-            tokens_in = int(usage.get("prompt_tokens") or 0) or self.estimate_tokens(str(messages))
-            tokens_out = int(usage.get("completion_tokens") or 0) or self.estimate_tokens(content)
-            return {"content": content, "tokens_in": tokens_in, "tokens_out": tokens_out, "raw": data}
-        except requests.RequestException as e:
-            raise ProviderError(str(e))
+        payload = {"model": self.model, "messages": [{"role": "user", "content": prompt}], "temperature": 0.2}
+        r = requests.post(url, headers=headers, json=payload, timeout=self.timeout)
+        r.raise_for_status()
+        obj = r.json()
+        choice = (obj.get("choices") or [{}])[0]
+        msg = (choice.get("message") or {}).get("content", "")
+        usage = obj.get("usage") or {}
+        return {
+            "content": msg,
+            "tokens_in": int(usage.get("prompt_tokens") or 0),
+            "tokens_out": int(usage.get("completion_tokens") or 0),
+            "raw": obj,
+        }
+
+

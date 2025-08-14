@@ -12,10 +12,8 @@ https://docs.djangoproject.com/en/5.2/ref/settings/
 
 from pathlib import Path
 import os
-from datetime import timedelta # 1. 确保导入了 timedelta
+from datetime import timedelta
 #引入AI相关设置
-from .setting_env import *
-from .settings_patch_ai import *
 from .settings_ai import *
 
 
@@ -208,8 +206,3 @@ CORS_ALLOW_ALL_ORIGINS = True
 #     "http://127.0.0.1:8848",
 #     "http://192.168.32.8:8848",
 # ]
-
-
-#日志测试
-from core.logging.json import setup_json_logging
-setup_json_logging()

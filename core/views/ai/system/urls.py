@@ -1,5 +1,6 @@
 # file: core/views/ai/system/urls.py
-# purpose: 系统路由整合（完整文件，新增 metrics/ready/live；保留先前所有端点）
+# purpose: 系统路由整合（完整文件覆盖）：在原有 billing/model/usage/health/docs/env/metrics/live/ready 基础上新增 provider/set。
+
 from __future__ import annotations
 from django.urls import path
 from .billing import TokenBalanceView, TokenTopupView
@@ -10,6 +11,7 @@ from .docs import AiOpenApiJsonView, AiDocsView, AiErrorCodesView
 from .env import AiEnvView
 from .metrics import AiMetricsView
 from .ready_live import AiLiveView, AiReadyView
+from .providers import SetProviderView
 
 urlpatterns = [
     # 计费
@@ -41,4 +43,7 @@ urlpatterns = [
     path("metrics/", AiMetricsView.as_view(), name="ai_metrics"),
     path("live/", AiLiveView.as_view(), name="ai_live"),
     path("ready/", AiReadyView.as_view(), name="ai_ready"),
+
+    # 供应商偏好设置（新增）
+    path("provider/set/", SetProviderView.as_view(), name="ai_set_provider"),
 ]

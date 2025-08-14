@@ -1,26 +1,27 @@
 # file: core/ai/llm/providers/mock.py
-# purpose: Mock 提供商（开发/测试用）；可在无 API Key 环境下工作
+# purpose: 本地开发/测试使用的 Mock 适配器；不依赖外部网络，按字符数估算 tokens
+# 用途：作为回退 provider（provider_key = "mock"），在无 API Key 或离线模式下可用
+
 from __future__ import annotations
-from typing import Any, Dict, List, Optional
-from ..base import LlmProvider, ProviderMeta
+from typing import Any, Dict
+from .base import BaseAdapter, _estimate_tokens
 
 
-class MockProvider(LlmProvider):
-    meta = ProviderMeta(
-        key="mock",
-        name="Mock",
-        default_model="mock-001",
-        env_keys={},
-    )
+class MockAdapter(BaseAdapter):
+    """Mock 驱动：回显用户输入，便于联调与离线测试。"""
 
-    def _ensure_config(self) -> None:
-        # mock 不需要配置
-        return None
+    provider = "mock"
+    default_model = "mock-echo"
 
-    def chat(self, *, messages: List[Dict[str, str]], model: Optional[str] = None, stream: bool = False, **kwargs) -> Dict[str, Any]:
-        user_parts = [m.get("content", "") for m in messages if m.get("role") == "user"]
-        text = "\n".join(user_parts).strip()
-        content = f"[mock:{model or self.meta.default_model}] {text[:200]}"
-        tokens_in = self.estimate_tokens(text)
-        tokens_out = self.estimate_tokens(content)
-        return {"content": content, "tokens_in": tokens_in, "tokens_out": tokens_out, "raw": {"provider": "mock"}}
+    def _chat_impl(self, prompt: str) -> Dict[str, Any]:
+        """返回简单回显内容，并按字符长度估算 tokens。"""
+        content = f"[mock] echo: {prompt[:2000]}"
+        ti = _estimate_tokens(prompt)
+        to = _estimate_tokens(content)
+        return {
+            "content": content,
+            "tokens_in": ti,
+            "tokens_out": to,
+            "raw": {"mock": True},
+        }
+

@@ -1,40 +1,47 @@
 # file: core/ai/llm/providers/gemini.py
-# purpose: Google Gemini 适配；读取 GOOGLE_API_KEY；使用 v1beta generateContent 接口
+# purpose: Google Gemini 适配器：调用 generateContent API，抽取文本与用量并标准化返回。
+
 from __future__ import annotations
-from typing import Any, Dict, List, Optional
+import os
 import requests
-from ..base import LlmProvider, ProviderMeta, ProviderError
+from typing import Any, Dict
+from .base import BaseAdapter
 
 
-class GeminiProvider(LlmProvider):
-    meta = ProviderMeta(
-        key="gemini",
-        name="Google Gemini",
-        default_model="gemini-1.5-pro",
-        env_keys={"api_key": "GOOGLE_API_KEY", "base_url": "GOOGLE_API_BASE"},
-    )
+class GeminiAdapter(BaseAdapter):
+    """Google Gemini 适配器：适配 `generateContent` 接口。"""
 
-    def chat(self, *, messages: List[Dict[str, str]], model: Optional[str] = None, stream: bool = False, **kwargs) -> Dict[str, Any]:
-        m = model or self.meta.default_model
-        base = (self.base_url or "https://generativelanguage.googleapis.com").rstrip("/")
-        url = f"{base}/v1beta/models/{m}:generateContent?key={self.api_key}"
-        # 将 messages 合并为单 prompt（简单化处理）
-        parts = []
-        for msg in messages:
-            role = msg.get("role", "user")
-            parts.append({"text": f"[{role}] {msg.get('content','')}"})
-        payload = {"contents": [{"parts": parts}]}
+    provider = "gemini"
+    default_model = os.getenv("GEMINI_MODEL", "gemini-1.5-pro-latest")
+
+    def __init__(self, **kw):
+        """从环境或传参读取 base_url/api_key/model，便于不同环境覆盖。"""
+        super().__init__(api_key=kw.get("api_key") or os.getenv("GEMINI_API_KEY"), model=kw.get("model"))
+        self.base = os.getenv("GEMINI_BASE_URL", "https://generativelanguage.googleapis.com")
+
+    def _chat_impl(self, prompt: str) -> Dict[str, Any]:
+        """调用 Gemini 的 HTTP API 并返回标准化结构。"""
+        if not self.api_key:
+            raise ValueError("GEMINI_API_KEY is required")
+        url = f"{self.base}/v1beta/models/{self.model}:generateContent?key={self.api_key}"
+        payload = {"contents": [{"parts": [{"text": prompt}]}]}
+        r = requests.post(url, json=payload, timeout=self.timeout)
+        r.raise_for_status()
+        obj = r.json()
+        # 文本抽取
+        text = ""
         try:
-            r = requests.post(url, json=payload, timeout=self.timeout)
-            if r.status_code >= 400:
-                raise ProviderError(f"gemini http {r.status_code}: {r.text[:200]}")
-            data = r.json()
-            candidates = data.get("candidates") or []
-            content = ""
-            if candidates and candidates[0].get("content", {}).get("parts"):
-                content = "".join(p.get("text", "") for p in candidates[0]["content"]["parts"])
-            tokens_in = self.estimate_tokens(str(messages))
-            tokens_out = self.estimate_tokens(content)
-            return {"content": content, "tokens_in": tokens_in, "tokens_out": tokens_out, "raw": data}
-        except requests.RequestException as e:
-            raise ProviderError(str(e))
+            cands = obj.get("candidates") or []
+            parts = (cands[0].get("content") or {}).get("parts") or []
+            text = "".join(p.get("text", "") for p in parts)
+        except Exception:
+            text = obj.get("text") or ""
+        usage = obj.get("usageMetadata") or {}
+        return {
+            "content": text,
+            "tokens_in": int(usage.get("promptTokenCount") or 0),
+            "tokens_out": int(usage.get("candidatesTokenCount") or 0),
+            "raw": obj,
+        }
+
+
